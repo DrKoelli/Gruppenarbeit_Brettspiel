@@ -1,3 +1,7 @@
 Wir programmieren ein Brettspiel
 und i bin da jonas und i bin a dabei
 und i bin da Martin Tschingala
+
+Wie soll das Programm funktionieren?
+
+speicherfunktion und auslesefunktion: spielernamen und anzahl der siege müssen gespeichert werden in file "scores.txt", file soll zum Schluss ausgelesen werden können  
