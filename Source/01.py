@@ -1,7 +1,7 @@
 """
 Koell's Branch
 TTT - Game
-->Main Loop
+->Main Loop (Checkwin, Playerswitch, etc....:)
 """
 x_dim = 3
 y_dim = 3
@@ -16,10 +16,15 @@ def show():
             print("|",y)
 
 def main()
+    current_player = 'O'
     while(True):
         spielfeld = [[" "]*y_dim for i in range(x_dim)]
         show()
-        current_player = 'X'
+        #player switch
+        if (current_player == 'X'):
+            current_player = 'O'
+        else:
+            current_player = 'X'
         #input from GUI - where does the player place?
         #place()
         if checkwin==-1:
@@ -30,7 +35,6 @@ def main()
             print("player O won")
         else:
             print("game goes on")
-            current_player = 'O'
         
 def place(rounds_played, current_player, x, y):
     spielfeld[x][y] = current_player
@@ -63,4 +67,3 @@ def checkwin(spielfeld, rounds_played, current_player):
     #game goes on
     answ = 99
     return answ
-
