@@ -1,6 +1,4 @@
 Wir programmieren ein Brettspiel
-und i bin da jonas und i bin a dabei
-und i bin da Martin Tschingala
 
 Wie soll das Programm funktionieren?
 
