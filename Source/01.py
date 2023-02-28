@@ -19,6 +19,4 @@ def Client_send(data):
 
 def Client_recive():
     data = s.recv(1024)
-    if not data:
-        break
     return data
