@@ -8,7 +8,7 @@ Luca
 
 import socket
 
-def Hostf():
+def Host_connect():
     #Port and Host IP
     PORT = 61111
     HOST = input("Host IP eingeben ->")
@@ -16,17 +16,17 @@ def Hostf():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
 
-def Connectionasteblish():
+def Connection_establish():
     #need this before you can send anything
     conn, addr = s.accept()
 
-def Sendmessage(data):
+def Host_send(data):
     #sends input
     data = bytes(data, 'utf-8')
     conn.sendall(data)
 
 
-def Recivemessage():
+def Host_recive():
     #recives input
     data = conn.recv(1024)
     return data
