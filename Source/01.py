@@ -4,7 +4,7 @@ Designing a popular game
 """
 
 def save(name,win):
-    #opening teh save file to read and write
+    #opening the save file to read and write
     fobj=open("scores.txt", "r+")
     #saving the content of the file into a list of strings
     lines = fobj.readlines()
@@ -13,7 +13,7 @@ def save(name,win):
     #enumerate keeps track of the index of each line -> enumerate(['a', 'b', 'c'])-->(0, 'a'), (1, 'b'), (2, 'c')
     for i, line in enumerate(lines):
         if line.startswith(name + ","):
-                #splitting the line into two parts, the second entry->[1] should be the number of existing wins
+                #splitting the line into two parts, the second entry->[1] should be the number of already existing wins
             parts = line.strip().split(", ")
             #saving the number of wins into a variable
             existing_win = int(parts[1])
