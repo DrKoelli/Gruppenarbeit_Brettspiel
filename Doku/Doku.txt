@@ -2,4 +2,4 @@ Wir programmieren ein Brettspiel
 
 Do(23.02.2023): schreiben der save funktion
 Mi(01.03.2023): hinzufügen der kommentare für besseres Verständnis
-Mi(01.03.2023): fertigstellung der read function
+Mi(01.03.2023): fertigstellung der read function sowie kommentieren der read function
