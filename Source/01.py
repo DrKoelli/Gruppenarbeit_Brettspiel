@@ -29,20 +29,30 @@ class MainMenu(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
+
+    #Das Fenster zum Auswählen des Benutzernamen des Spielers und der IP des Gegners anzeigen
     def game(self):
         self.w = Host_or_client()
         self.w.show()
     
+
+    #Das Scoreboard anzeigen
     def scoreboard(self):
         self.w = Scoreboard()
         self.w.show()
 
+
+
 class Host_or_client(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.w = None
+
         self.setFixedSize(285, 118)
+
+        #Layout erstellen
         layout = QGridLayout(self)
+
+        #Labels und Texteingaben erstellen und zu Layout hinzufügen
         ip_description = QLabel("Eigene IP: ", self)
         layout.addWidget(ip_description, 0, 0)
         ip = QLabel(socket.gethostbyname(socket.gethostname()), self)
@@ -65,14 +75,17 @@ class Host_or_client(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
         self.show()
-        print(self.size())
     
+
     def host(self):
+        #Das Spiel starten
         if(self.ip_other_player.text().strip(" ") != "" and self.username.text().strip(" ") != ""):
             self.w = Game(self.username.text())
             self.w.show()
 
+
     def client(self):
+        #das Spiel starten
         if(self.ip_other_player.text().strip(" ") != "" and self.username.text().strip(" ") != ""):
             self.w = Game(self.username.text())
             self.w.show()
@@ -82,14 +95,21 @@ class Host_or_client(QMainWindow):
 class Scoreboard(QMainWindow):
     def __init__(self):
         super().__init__()
+        #Den Score einlesen
         score = read()
+
+        #Layout erstellen
         layout = QVBoxLayout()
+
+        #Überschrift erstellen
         label = QLabel("Scoreboard", self)
         label.setFont(QFont("Times", 20))
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
+
+        #Label erstellen, mit welchen die scores angezeigt werden
         for i in range(len(score)):
-            label = QLabel(f"{i+1}: {score[i][0]}: {score[i][1]}", self)
+            label = QLabel(f"{i+1}. {score[i][0]}: {score[i][1]}", self)
             layout.addWidget(label)
         widget = QWidget()
         widget.setLayout(layout)
@@ -102,42 +122,71 @@ class Scoreboard(QMainWindow):
 class Game(QMainWindow):
     def __init__(self, username):
         super().__init__()
+        self.setFixedSize(400, 400)
+
+        #Spielfeld erstellen
         self.field = [[" " for x in range(3)] for y in range(3)]
+
+        #Variablen definieren
         self.current_player = "X"
         self.rounds_played = 0
         self.username = username
+
+        #layout erstellen
         layout = QGridLayout(self)
-        self.setFixedSize(400, 400)
+
+        #Dem Fenster eine blaue Hintergrundfarbe geben
         p = self.palette()
         p.setColor(self.backgroundRole(), QColor(0, 0, 255, 255))
         self.setPalette(p)
+
+        #eine Buttongroup erstellen
         self.group = QButtonGroup(self) 
+
         for x in range(3):
             for y in range(3):
+                #Button erstellen
                 button = QPushButton()
                 button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+                
+                #Butten zu Buttongroup hinzufügen
                 self.group.addButton(button, x*3+y)
+                
+                #Button zu layout hinzufügen
                 layout.addWidget(button, x, y)
-        self.show()
+
         self.group.buttonClicked.connect(self.button_clicked)
+
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
         self.show()
 
+
     def button_clicked(self, object):
+        #Den Button mit einem Bild versehen
         Image = QPixmap(100, 100)
         if(self.current_player == "X"):
             Image.load(os.path.dirname(os.path.abspath(__file__))+"/TicTacToe_x.png")
         else:
             Image.load(os.path.dirname(os.path.abspath(__file__))+"/TicTacToe_o.png")
-        x = int(self.group.id(object)/3)
-        y = self.group.id(object) - 3*x
-        self.rounds_played += 1
-        winner, self.field, self.current_player = main(self.rounds_played, self.current_player, self.field, x, y)
-        object.setEnabled(False)
         object.setIcon(QIcon(Image))
         object.setIconSize(QSize(100, 100))
+
+        #Die Position des Buttons herausfinden
+        x = int(self.group.id(object)/3)
+        y = self.group.id(object) - 3*x
+
+        #Die Anzahl der gespielten Runden um eeins erhöhen
+        self.rounds_played += 1
+
+        #Herausfinden, ob jemand gewonnen hat und den Spieler tauschen
+        winner, self.field, self.current_player = main(self.rounds_played, self.current_player, self.field, x, y)
+        
+        #Den Button deaktivieren
+        object.setEnabled(False)
+
+        #Anzeigen, ob jemand gewonnen hat
         if(winner == 0 or winner == 1 or winner == -1):
             for i in range(9):
                 self.group.button(i).setEnabled(False)
@@ -152,6 +201,8 @@ class Game(QMainWindow):
             box.exec()
 
         self.show()
+
+
 
 def main(rounds_played, current_player, spielfeld, x, y):
     #player switch
