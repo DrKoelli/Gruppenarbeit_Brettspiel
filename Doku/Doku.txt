@@ -1,3 +1,11 @@
-Wir programmieren ein Brettspiel
-und i bin da jonas und i bin a dabei
-und i bin da Martin Tschingala
+Ich programmiere die Checkwin funktion.
+folgender Ablauf:
+Ich erstelle eine 2-D-Array welches neben dem GUI-Spielfeld parallel läuft.
+Die Funktion wird bei jedem neuen Zug aufgerfuen und erhält folgende Parameter
+-jeweils die x und y Koordinate
+-das Spielfeld(vor dem aktuellsten Zug)
+-den Spieler(vor dem aktuellsten Zug)
+-Anzahl der bereits gespielten Runden
+Zunächst mache ich einen Spielerwechseltrage, danach trage ich die x und y Koordinaten in mein Spielfeld ein und kann somit eine einfache Checkwin-Funktion machen.
+Anschließend gebe ich das aktuallisierte Spielfeld und das Resultat der Checkwin-Funktion aus.(wer hat gewonnen?; Unentschieden?; weder noch?).
+
