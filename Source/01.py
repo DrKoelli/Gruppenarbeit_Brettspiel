@@ -1,3 +1,4 @@
+#imports
 import sys
 import socket
 import os
@@ -5,17 +6,23 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
+#Hauptmenü
 class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.w = None
+
+        #layout definieren
         layout = QVBoxLayout(self)
+
+        #buttons erstellen
         button_game = QPushButton("Play", self)
         button_game.clicked.connect(self.game)
         button_game.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         button_scoreboard = QPushButton("Scoreboard", self)
         button_scoreboard.clicked.connect(self.scoreboard)
         button_scoreboard.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        
+        #Buttons zu layout hinzufügen
         layout.addWidget(button_game)
         layout.addWidget(button_scoreboard)
         widget = QWidget()
