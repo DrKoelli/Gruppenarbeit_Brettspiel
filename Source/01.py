@@ -9,9 +9,13 @@ Johannes Sieß
 import socket
 
 def Client_connect():
+    #Port über welchen die Verbindung läuft
     PORT=61111
+    #IP-Adresse des Host
     HOST = input()
+    #Adress Familie und Socket-Typ bestimmen
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #connect to Host
     s.connect((HOST, PORT))
 
 def Client_send(data):
@@ -19,4 +23,5 @@ def Client_send(data):
 
 def Client_recive():
     data = s.recv(1024)
+    #data ins Hauptprogramm zurückgeben
     return data
