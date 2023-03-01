@@ -1,7 +1,6 @@
 import sys
 import socket
 import os
-from random import gauss
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
@@ -65,6 +64,9 @@ class Host_or_client(QMainWindow):
 class Game(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.field = [[" " for x in range(3)] for y in range(3)]
+        self.current_player = "X"
+        self.rounds_played = 0
         layout = QGridLayout(self)
         self.setFixedSize(400, 400)
         p = self.palette()
@@ -84,9 +86,80 @@ class Game(QMainWindow):
         self.setCentralWidget(widget)
         self.show()
 
-    def button_clicked(self):
-        pass
+    def button_clicked(self, object):
+        Image = QPixmap(100, 100)
+        if(self.current_player == "X"):
+            Image.load(os.path.dirname(os.path.abspath(__file__))+"/TicTacToe_x.png")
+        else:
+            Image.load(os.path.dirname(os.path.abspath(__file__))+"/TicTacToe_o.png")
+        x = int(self.group.id(object)/3)
+        y = self.group.id(object) - 3*x
+        self.rounds_played += 1
+        winner, self.field, self.current_player = main(self.rounds_played, self.current_player, self.field, x, y)
+        object.setEnabled(False)
+        object.setIcon(QIcon(Image))
+        object.setIconSize(QSize(100, 100))
+        if(winner == 0 or winner == 1 or winner == -1):
+            for i in range(9):
+                self.group.button(i).setEnabled(False)
+            box = QMessageBox(self)
+            if(winner == 0):
+                box.setText("Tie")
+            elif(winner == 1):
+                box.setText("You have won!!!")
+            else:
+                box.setText("You lost!!!")
+            box.exec()
 
+        self.show()
+
+def main(rounds_played, current_player, spielfeld, x, y):
+    #player switch
+    if (current_player == 'X'):
+        current_player = 'O'
+    else:
+        current_player = 'X'
+    #input from GUI (x,y) - where does the player place?
+    place(spielfeld, current_player, x, y)
+    L = (checkwin(spielfeld, rounds_played, current_player), spielfeld, current_player)
+    return L
+    
+def place(spielfeld, current_player, x, y):
+    spielfeld[x][y] = current_player
+    
+    
+    
+def checkwin(spielfeld, rounds_played, current_player):    
+    if current_player == 'X':       #decide wether player x or o won
+        answ = -1
+    else:
+        answ = 1
+    
+    for y in range(0,3):
+        if((spielfeld[0][y]==current_player)and(spielfeld[1][y]==current_player)and(spielfeld[2][y]==current_player)):
+            print(1)
+            return answ
+
+    for x in range (0,3):
+        if((spielfeld[x][0]==current_player) and(spielfeld[x][1]==current_player)and(spielfeld[x][2]==current_player)):
+            print(2)
+            return answ
+
+    # diag. to the right
+    if((spielfeld[0][0]==current_player)and(spielfeld[1][1]==current_player)and(spielfeld[2][2]==current_player)):
+        print(3)
+        return answ
+
+    # diag. to the left
+    if(spielfeld[0][2] == current_player and spielfeld[1][1] == current_player and spielfeld[2][0] == current_player):
+        return answ
+    if (rounds_played > 8):
+        answ = 0
+        return answ
+    #game goes on
+    else:
+        answ = 99
+        return answ
 
 app = QApplication(sys.argv)
 window = MainMenu()
