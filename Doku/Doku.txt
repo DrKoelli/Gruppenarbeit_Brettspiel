@@ -1,3 +1,4 @@
 Wir programmieren ein Brettspiel
-und i bin da jonas und i bin a dabei
-und i bin da Martin Tschingala
+
+Do(23.02.2023): schreiben der save funktion
+Mi(01.03.2023): hinzufügen der kommentare für besseres Verständnis
