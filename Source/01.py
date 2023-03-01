@@ -16,19 +16,18 @@ def show():
             print("|",y)
 
 def main(rounds_played, current_player, x, y):
-    current_player = 'O'
     spielfeld = [[" "]*y_dim for i in range(x_dim)]
-    show()
+    #show()
     #player switch
     if (current_player == 'X'):
         current_player = 'O'
     else:
         current_player = 'X'
-    #input from GUI - where does the player place?
-    place(rounds_played, current_player, x, y)
-    return checkwin
+    #input from GUI (x,y) - where does the player place?
+    place(spielfeld, current_player, x, y)
+    return checkwin(spielfeld, rounds_played, current_player)
         
-def place(rounds_played, current_player, x, y):
+def place(spielfeld, current_player, x, y):
     spielfeld[x][y] = current_player
 
     
@@ -60,4 +59,5 @@ def checkwin(spielfeld, rounds_played, current_player):
     else:
         answ = 99
         return answ
+
 #Checkwin result (-1 = player x won; 0 = Tie; 1 = player O won; 99 = game goes on)
