@@ -2,4 +2,5 @@ Wir programmieren ein Brettspiel
 
 Wie soll das Programm funktionieren?
 
-speicherfunktion und auslesefunktion: spielernamen und anzahl der siege müssen gespeichert werden in file "scores.txt", file soll zum Schluss ausgelesen werden können  
+speicherfunktion und auslesefunktion: spielernamen und anzahl der siege müssen gespeichert werden in file "scores.txt", file soll zum Schluss ausgelesen werden können 
+es muss ein leeres text file "scores.txt" im vorhinein erstellt werden um funktionstüchtigkeit zu gewährleisten
