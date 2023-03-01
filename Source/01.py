@@ -53,6 +53,7 @@ class Host_or_client(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
     
+
     def host(self):
         if(self.ip_other_player.text().strip(" ") != ""):
             self.w = Game()
