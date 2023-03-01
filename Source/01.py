@@ -4,8 +4,6 @@ Luca
 28.02.23
 '''
 
-#Maybe unfinished / Need to test in main branch :/
-
 import socket
 
 def Host_connect():
@@ -15,18 +13,15 @@ def Host_connect():
     #Wait for connection
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
-
-def Connection_establish():
-    #need this before you can send anything
     conn, addr = s.accept()
+    return conn
 
-def Host_send(data):
+def Host_send(data, conn):
     #sends input
     data = bytes(data, 'utf-8')
     conn.sendall(data)
 
-
-def Host_recive():
+def Host_recive(conn):
     #recives input
     data = conn.recv(1024)
     return data
