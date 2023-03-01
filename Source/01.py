@@ -15,36 +15,25 @@ def show():
                 print("|{}".format(spielfeld[x][y]),end="")
             print("|",y)
 
-def main()
+def main(rounds_played, current_player, x, y):
     current_player = 'O'
-    while(True):
-        spielfeld = [[" "]*y_dim for i in range(x_dim)]
-        show()
-        #player switch
-        if (current_player == 'X'):
-            current_player = 'O'
-        else:
-            current_player = 'X'
-        #input from GUI - where does the player place?
-        #place()
-        if checkwin==-1:
-            print("player x won")
-        if checkwin==0:
-            print("TIE!!!")
-        if checkwin==1:
-            print("player O won")
-        else:
-            print("game goes on")
+    spielfeld = [[" "]*y_dim for i in range(x_dim)]
+    show()
+    #player switch
+    if (current_player == 'X'):
+        current_player = 'O'
+    else:
+        current_player = 'X'
+    #input from GUI - where does the player place?
+    place(rounds_played, current_player, x, y)
+    return checkwin
         
 def place(rounds_played, current_player, x, y):
     spielfeld[x][y] = current_player
-    show()
+
     
     
 def checkwin(spielfeld, rounds_played, current_player):    
-    answ = 0
-    if (rounds_played > 8):
-        return answ
     if current_player == 'X':       #decide wether player x or o won
         answ = -1
     else:
@@ -64,6 +53,11 @@ def checkwin(spielfeld, rounds_played, current_player):
     # diag. to the left
     if((spielfeld[2][0]==current_player)and(spielfeld[1][1]==current_player)and(spielfeld[0][2])):
         return answ
+    if (rounds_played > 8):
+        answ = 0
+        return answ
     #game goes on
-    answ = 99
-    return answ
+    else:
+        answ = 99
+        return answ
+#Checkwin result (-1 = player x won; 0 = Tie; 1 = player O won; 99 = game goes on)
