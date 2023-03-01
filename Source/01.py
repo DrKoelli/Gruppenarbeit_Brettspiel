@@ -1,8 +1,3 @@
-"""
-A school project
-Designing a popular game
-"""
-
 def save(name,win):
     #opening the save file to read and write
     fobj=open("scores.txt", "r+")
