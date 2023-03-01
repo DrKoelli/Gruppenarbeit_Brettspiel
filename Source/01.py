@@ -23,5 +23,5 @@ def Client_send(data):
 
 def Client_recive():
     data = s.recv(1024)
-    #data ins Hauptprogramm zurückgeben
+    #data zurückgeben
     return data
