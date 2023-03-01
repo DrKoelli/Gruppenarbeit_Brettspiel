@@ -1,10 +1,5 @@
-"""
-A school project
-Designing a popular game
-Object oriented TIC-TAC-TOE with GUI
-"""
-
 import sys
+import socket
 import os
 from random import gauss
 from PyQt6.QtCore import *
@@ -38,22 +33,59 @@ class MainMenu(QMainWindow):
 class Host_or_client(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.w = None
+        self.setFixedSize(285, 100)
         layout = QGridLayout(self)
         ip_description = QLabel("Eigene IP: ", self)
-        ip = QLabel("")
+        layout.addWidget(ip_description, 0, 0)
+        ip = QLabel(socket.gethostbyname(socket.gethostname()), self)
+        layout.addWidget(ip, 0, 1)
         ip_other_player_description = QLabel("IP des anderen Spielers: ", self)
-        layout.addWidget(ip_other_player_description, 0, 0)
-        ip_other_player = QLineEdit()
-        layout.addWidget(ip_other_player, 0, 1)
+        layout.addWidget(ip_other_player_description, 1, 0)
+        self.ip_other_player = QLineEdit()
+        layout.addWidget(self.ip_other_player, 1, 1)
         button_host = QPushButton("Host", self)
-        layout.addWidget(button_host, 1, 0)
+        button_host.clicked.connect(self.host)
+        layout.addWidget(button_host, 2, 0)
         button_client = QPushButton("Client", self)
-        layout.addWidget(button_client, 1, 1)
+        button_client.clicked.connect(self.client)
+        layout.addWidget(button_client, 2, 1)
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+    
+    def host(self):
+        if(self.ip_other_player.text().strip(" ") != ""):
+            self.w = Game()
+            self.w.show()
 
+    def client(self):
+        pass
 
+class Game(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        layout = QGridLayout(self)
+        self.setFixedSize(400, 400)
+        p = self.palette()
+        p.setColor(self.backgroundRole(), QColor(0, 0, 255, 255))
+        self.setPalette(p)
+        self.group = QButtonGroup(self) 
+        for x in range(3):
+            for y in range(3):
+                button = QPushButton()
+                button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+                self.group.addButton(button, x*3+y)
+                layout.addWidget(button, x, y)
+        self.show()
+        self.group.buttonClicked.connect(self.button_clicked)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+        self.show()
+
+    def button_clicked(self):
+        pass
 
 
 app = QApplication(sys.argv)
