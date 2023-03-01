@@ -17,11 +17,12 @@ def Client_connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #connect to Host
     s.connect((HOST, PORT))
+    return s
 
-def Client_send(data):
+def Client_send(data, s):
     s.sendall(data.encode())
 
-def Client_recive():
+def Client_recive(s):
     data = s.recv(1024)
     #data zurückgeben
     return data
