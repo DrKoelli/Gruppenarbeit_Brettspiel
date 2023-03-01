@@ -1,1 +1,9 @@
-def 
+def read():
+    scoreboard=[]
+    fobj=open("scores.txt","r")
+    lines=fobj.readlines()
+    for line in lines:
+        name, wins = line.strip().split(", ")
+        scoreboard.append([name, int(wins)])
+    scoreboard.sort(key=lambda x: x[1], reverse=True)
+    return scoreboard
