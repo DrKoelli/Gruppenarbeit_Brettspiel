@@ -3,21 +3,20 @@ Koell's Branch
 TTT - Game
 ->Main Loop (Checkwin, Playerswitch, etc....:)
 """
-x_dim = 3
-y_dim = 3
 
+#sepp
 def show():
-    for x in range(x_dim):
+    for x in range(3):
         print(" {}".format(x),end="")
     print()
-    for y in range(y_dim):
-            for x in range(x_dim):
+    for y in range(3):
+            for x in range(3):
                 print("|{}".format(spielfeld[x][y]),end="")
             print("|",y)
 
-def main(rounds_played, current_player, x, y):
-    spielfeld = [[" "]*y_dim for i in range(x_dim)]
-    #show()
+
+
+def main(rounds_played, current_player, spielfeld, x, y):
     #player switch
     if (current_player == 'X'):
         current_player = 'O'
@@ -25,11 +24,12 @@ def main(rounds_played, current_player, x, y):
         current_player = 'X'
     #input from GUI (x,y) - where does the player place?
     place(spielfeld, current_player, x, y)
-    return checkwin(spielfeld, rounds_played, current_player)
-        
+    L = (checkwin(spielfeld, rounds_played, current_player), spielfeld)
+    return L
+    
 def place(spielfeld, current_player, x, y):
     spielfeld[x][y] = current_player
-
+    
     
     
 def checkwin(spielfeld, rounds_played, current_player):    
@@ -59,5 +59,3 @@ def checkwin(spielfeld, rounds_played, current_player):
     else:
         answ = 99
         return answ
-
-#Checkwin result (-1 = player x won; 0 = Tie; 1 = player O won; 99 = game goes on)
