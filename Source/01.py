@@ -1,3 +1,9 @@
+"""
+Elias Köll, Johannes Sieß, Loca Bombardelli, Jonas Waldner
+TicTacToe mit GUI und Netzwerkfunktion
+02.03.2023
+"""
+
 #imports
 import sys
 import socket
