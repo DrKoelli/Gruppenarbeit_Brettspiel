@@ -267,6 +267,7 @@ class Game(QMainWindow):
 
         self.got_Cords()
 
+
     def got_Cords(self):
         #Die Koordinaten empfangen
         cords = Host_recive(self.conn)
@@ -301,6 +302,8 @@ class Game(QMainWindow):
             return
         self.update()
         self.show()        
+
+
 
 def main(rounds_played, current_player, spielfeld, x, y):
     #player switch
