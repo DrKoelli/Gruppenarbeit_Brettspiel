@@ -6,6 +6,47 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
+
+def Host_connect(HOST):
+    #Port and Host IP
+    PORT = 61111
+    #Wait for connection
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT))
+    s.listen(5)
+    return s
+
+def Makeconnection(s):
+    conn, addr = s.accept()
+    return conn
+
+def Host_send(data, conn):
+    #sends input
+    data = bytes(data, 'utf-8')
+    conn.sendall(data)
+
+def Host_recive(conn):
+    #recives input
+    data = conn.recv(1024)
+    return data
+
+def Client_connect(HOST):
+    #Port über welchen die Verbindung läuft
+    PORT=61111
+    #Adress Familie und Socket-Typ bestimmen
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #connect to Host
+    s.connect((HOST, PORT))
+    return s
+
+def Client_send(data, s):
+    s.sendall(data.encode())
+
+def Client_recive(s):
+    data = s.recv(1024)
+    #data zurückgeben
+    return data
+
 #Hauptmenü
 class MainMenu(QMainWindow):
     def __init__(self):
@@ -80,14 +121,19 @@ class Host_or_client(QMainWindow):
     def host(self):
         #Das Spiel starten
         if(self.ip_other_player.text().strip(" ") != "" and self.username.text().strip(" ") != ""):
-            self.w = Game(self.username.text())
+            IP = self.ip_other_player.text()
+            server = Host_connect(IP)
+            conn = Makeconnection(server)
+            self.w = Game(self.username.text(), True, conn)
             self.w.show()
 
 
     def client(self):
         #das Spiel starten
         if(self.ip_other_player.text().strip(" ") != "" and self.username.text().strip(" ") != ""):
-            self.w = Game(self.username.text())
+            IP = self.ip_other_player.text()
+            Cserver = Client_connect(IP)
+            self.w = Game(self.username.text(), False, Cserver)
             self.w.show()
 
 
@@ -120,7 +166,7 @@ class Scoreboard(QMainWindow):
 
 
 class Game(QMainWindow):
-    def __init__(self, username):
+    def __init__(self, username, Ishost, conn):
         super().__init__()
         self.setFixedSize(400, 400)
 
@@ -131,6 +177,8 @@ class Game(QMainWindow):
         self.current_player = "X"
         self.rounds_played = 0
         self.username = username
+        self.conn = conn
+        self.isHost = Ishost
 
         #layout erstellen
         layout = QGridLayout(self)
@@ -161,6 +209,8 @@ class Game(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
         self.show()
+        if(Ishost == True):
+            self.got_Cords()
 
 
     def button_clicked(self, object):
@@ -177,7 +227,7 @@ class Game(QMainWindow):
         x = int(self.group.id(object)/3)
         y = self.group.id(object) - 3*x
 
-        #Die Anzahl der gespielten Runden um eeins erhöhen
+        #Die Anzahl der gespielten Runden um eins erhöhen
         self.rounds_played += 1
 
         #Herausfinden, ob jemand gewonnen hat und den Spieler tauschen
@@ -186,6 +236,11 @@ class Game(QMainWindow):
         #Den Button deaktivieren
         object.setEnabled(False)
 
+        self.show()
+        self.update()
+
+        Host_send(f"{x},{y}", self.conn)
+
         #Anzeigen, ob jemand gewonnen hat
         if(winner == 0 or winner == 1 or winner == -1):
             for i in range(9):
@@ -193,16 +248,53 @@ class Game(QMainWindow):
             box = QMessageBox(self)
             if(winner == 0):
                 box.setText("Tie")
-            elif(winner == 1):
+            elif(winner == 1 and self.isHost == False):
                 box.setText(f"{self.username}, you have won!!!")
                 save(self.username, 1)
             else:
                 box.setText(f"{self.username}, you lost!!!")
             box.exec()
+            return
 
         self.show()
+        self.update()
 
+        self.got_Cords()
 
+    def got_Cords(self):
+        #Die Koordinaten empfangen
+        cords = Host_recive(self.conn)
+        [x, y] = str(cords, "utf-8").split(",")
+        x = int(x)
+        y = int(y)
+
+        #Dem Button ein Bild anfügen
+        Image = QPixmap(100, 100)
+        if(self.current_player == "X"):
+            Image.load(os.path.dirname(os.path.abspath(__file__))+"/TicTacToe_x.png")
+        else:
+            Image.load(os.path.dirname(os.path.abspath(__file__))+"/TicTacToe_o.png")
+        self.group.button(3*x+y).setIcon(QIcon(Image))
+        self.group.button(3*x+y).setIconSize(QSize(100, 100))
+        self.group.button(3*x+y).setEnabled(False)
+
+        #Spieler wechseln und herausfinden, wer der Gewinner ist
+        winner, self.field, self.current_player = main(self.rounds_played, self.current_player, self.field, x, y)
+        if(winner == 0 or winner == 1 or winner == -1):
+            for i in range(9):
+                self.group.button(i).setEnabled(False)
+            box = QMessageBox(self)
+            if(winner == 0):
+                box.setText("Tie")
+            elif(winner == 1 and self.isHost == False):
+                box.setText(f"{self.username}, you have won!!!")
+                save(self.username, 1)
+            else:
+                box.setText(f"{self.username}, you lost!!!")
+            box.exec()
+            return
+        self.update()
+        self.show()        
 
 def main(rounds_played, current_player, spielfeld, x, y):
     #player switch
