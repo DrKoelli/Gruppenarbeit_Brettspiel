@@ -1,16 +1,19 @@
 def read():
-    #creating a list that will later be filled two dimensionally->[[name1,wins1],[name2,wins2],...]
-    scoreboard=[]
-    #opening file
-    fobj=open("scores.txt","r")
-    #saving the contents of the file into a list of strings
-    lines=fobj.readlines()
-    for line in lines:
-        #splitting the each entry into two separate strings
-        name, wins = line.strip().split(", ")
-        #appending the strings into the scoreboard and also converting wins into an integer
-        scoreboard.append([name, int(wins)])
-    #sorting the list in decending order based on the wins variable
-    #"key=lambda x: x[1]" is needed to be able to refer into the inner lists as the criteria for the "sort" function
-    scoreboard.sort(key=lambda x: x[1], reverse=True)
-    return scoreboard
+    try:
+        #creating a list that will later be filled two dimensionally->[[name1,wins1],[name2,wins2],...]
+        scoreboard=[]
+        #opening file
+        fobj=open("scores.txt","r")
+        #saving the contents of the file into a list of strings
+        lines=fobj.readlines()
+        for line in lines:
+            #splitting the each entry into two separate strings
+            name, wins = line.strip().split(", ")
+            #appending the strings into the scoreboard and also converting wins into an integer
+            scoreboard.append([name, int(wins)])
+        #sorting the list in decending order based on the wins variable
+        #"key=lambda x: x[1]" is needed to be able to refer into the inner lists as the criteria for the "sort" function
+        scoreboard.sort(key=lambda x: x[1], reverse=True)
+        return scoreboard
+    except:
+        return []
